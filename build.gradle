@@ -1,0 +1,59 @@
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'se.transmode.gradle:gradle-docker:1.2'
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.3.5.RELEASE")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'spring-boot'
+apply plugin: 'application'
+apply plugin: 'docker'
+
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+//jar {
+//    Jar.archiveName "cache-calculator.jar"
+//}
+
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter"
+    compile "org.springframework.boot:spring-boot-configuration-processor"
+    compile("org.springframework.boot:spring-boot-starter-web")
+
+//    compile("org.springframework.boot:spring-boot-starter-actuator")
+//    compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-turbine-stream', version: '1.1.3.RELEASE'
+
+
+    compile "org.springframework.data:spring-data-redis"
+    compile "redis.clients:jedis"
+
+    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile "com.jayway.restassured:rest-assured:2.5.0"
+}
+
+//
+//task buildDocker(type: Docker, dependsOn: build) {
+//    tag = "volkodav/$rootProject.name"
+//    push = false
+//    applicationName = Jar.baseName
+//    dockerfile = file('src/main/docker/Dockerfile')
+//    doFirst {
+//        copy {
+//            from Jar
+//            into stageDir
+//        }
+//    }
+//}

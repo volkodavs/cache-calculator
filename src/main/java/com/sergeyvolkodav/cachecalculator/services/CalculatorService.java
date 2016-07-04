@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class CalcularorService implements ICalculator {
+public class CalculatorService implements ICalculator {
 
     @Autowired
     CalcCacheRepository calcCacheRepository;
@@ -49,18 +49,23 @@ public class CalcularorService implements ICalculator {
         return doCalc(values, Operations.DIVIDE);
     }
 
-
     private BigDecimal doCalc(List<BigDecimal> values, Operations operations) {
         String sumString = convertToString(values);
         String hashValue = Md5Hash.md5Sum(sumString);
         String redisPath = buildRedisPath(operations.name(), hashValue);
         String cachedResult = calcCacheRepository.getCachedResult(redisPath);
         if (cachedResult == null) {
-            BigDecimal calcResult = values.stream().reduce(operations.getOperator()).get();
+            BigDecimal calcResult = calculation(values, operations);
             calcCacheRepository.saveCachedResult(redisPath, calcResult.toString());
             return calcResult;
         }
         return new BigDecimal(cachedResult);
+    }
+
+    public BigDecimal calculation(List<BigDecimal> values, Operations operations) {
+        return values.stream().reduce(operations.getOperator()).orElseGet(() -> {
+            throw new RuntimeException("Try with a different numbers");
+        });
     }
 
     private String convertToString(List<?> list) {

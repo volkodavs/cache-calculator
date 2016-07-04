@@ -99,7 +99,7 @@ public class CalculatorController {
         String delimiter = "\\/";
         String[] normalizeValues = values.replace(",", ".").split(delimiter);
         return Arrays.asList(normalizeValues).stream()
-                .map(BigDecimal::new).map(e -> e.setScale(20, RoundingMode.HALF_UP))
+                .map(BigDecimal::new).map(e -> e.setScale(2, RoundingMode.HALF_UP))
                 .collect(Collectors.toList());
     }
 
